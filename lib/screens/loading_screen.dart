@@ -12,6 +12,7 @@ class LoadingScreen extends StatelessWidget {
     return Scaffold(
       body: BlocBuilder<GpsBloc, GpsState>(
         builder: (context, state) {
+          debugPrint('is all granted...  ${state.isAllGranted}');
           return state.isAllGranted
               ? const MapScreen()
               : const GpsAccessScreen();

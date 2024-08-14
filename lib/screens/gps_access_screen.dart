@@ -9,15 +9,14 @@ class GpsAccessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Material App Bar'),
-      ),
+          title: const Text('Material App Bar'), backgroundColor: Colors.amber),
       body: Center(
         child: BlocBuilder<GpsBloc, GpsState>(
           builder: (context, state) {
             debugPrint('pasas por aquiiiii..... $state');
             return !state.isGpsEnable
                 ? _EnableGpsMessage(state.isGpsEnable)
-                : const _AccessButton();
+                : _AccessButton(state.isGpsEnable, state.isAllGranted);
           },
         ),
       ),
@@ -26,7 +25,10 @@ class GpsAccessScreen extends StatelessWidget {
 }
 
 class _AccessButton extends StatelessWidget {
-  const _AccessButton();
+  final bool isGpsEnable;
+  final bool isGpsPermissionGranted;
+
+  const _AccessButton(this.isGpsEnable, this.isGpsPermissionGranted);
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,15 @@ class _AccessButton extends StatelessWidget {
           },
           shape: const StadiumBorder(),
           child: const Text('Habilitar GPS'),
+        ),
+        MaterialButton(
+          color: Colors.redAccent,
+          onPressed: () {
+            debugPrint(
+                '_checkGpsStatus......$isGpsEnable....$isGpsPermissionGranted');
+          },
+          shape: const StadiumBorder(),
+          child: const Text('db -- GPS'),
         ),
       ],
     );

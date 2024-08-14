@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'package:flutter/material.dart';
 
 part 'gps_event.dart';
 part 'gps_state.dart';
@@ -47,7 +48,6 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
     gpsServiceSubscription =
         Geolocator.getServiceStatusStream().listen((event) {
       final isEnable = event.index == 1 ? true : false;
-      debugPrint('_checkGpsStatus......$isEnable');
       add(GpsAndPermissionsEvent(isEnable, state.isGpsPermissionGranted));
     });
 
@@ -57,17 +57,20 @@ class GpsBloc extends Bloc<GpsEvent, GpsState> {
   Future<void> askGpsStatus() async {
     final status = await Permission.location.request();
 
+    debugPrint('askGpsStatus status......$status');
+    debugPrint('askGpsStatus state......$state');
+
     switch (status) {
       case PermissionStatus.denied:
-        add(GpsAndPermissionsEvent(state.isGpsEnable, true));
+        add(GpsAndPermissionsEvent(state.isGpsEnable, false));
 
       case PermissionStatus.granted:
       case PermissionStatus.restricted:
       case PermissionStatus.limited:
       case PermissionStatus.permanentlyDenied:
       case PermissionStatus.provisional:
-        add(GpsAndPermissionsEvent(state.isGpsEnable, false));
-        openAppSettings();
+        add(GpsAndPermissionsEvent(state.isGpsEnable, true));
+      // openAppSettings();
     }
     // status.isGranted ?
 
