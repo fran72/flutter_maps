@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-// import 'package:mapas_app/blocs/gps/gps_bloc.dart';
 import 'package:mapas_app/blocs/location/location_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mapas_app/blocs/map/map_bloc.dart';
 import 'package:mapas_app/views/map_view.dart';
-import 'package:mapas_app/widgets/btn_follow_user.dart';
-import 'package:mapas_app/widgets/btn_location.dart';
-import 'package:mapas_app/widgets/btn_toggle_user_route.dart';
+import 'package:mapas_app/widgets/widgets.dart';
 
 class MapScreen extends StatefulWidget {
   const MapScreen({super.key});
@@ -67,26 +64,11 @@ class _MapScreenState extends State<MapScreen> {
                     initialLocation: locationState.lastKnownPosition!,
                     polylines: polylines.values.toSet(),
                   ),
-                  // const Center(
-                  //   child: Text(
-                  //     'data',
-                  //     style: TextStyle(color: Colors.white, fontSize: 24.0),
-                  //   ),
-                  // ),
+                  const CustomSearchBar(),
+                  const ManualMarker(),
                 ],
               );
             });
-
-            // return Center(
-            //   child: Column(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       const Text('<Si> hay position'),
-            //       Text(
-            //           '${state.lastKnownPosition!.latitude} , ${state.lastKnownPosition!.longitude}'),
-            //     ],
-            //   ),
-            // );
           }
         },
       ),

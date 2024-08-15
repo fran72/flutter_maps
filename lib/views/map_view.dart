@@ -23,8 +23,8 @@ class MapView extends StatelessWidget {
 
     final size = MediaQuery.of(context).size;
 
-    debugPrint('jsonEncode(uberMapTheme)..........');
-    debugPrint(jsonEncode(dessertTheme));
+    // debugPrint('jsonEncode(uberMapTheme)..........');
+    // debugPrint(jsonEncode(dessertTheme));
 
     return SizedBox(
       width: size.width,
@@ -33,6 +33,7 @@ class MapView extends StatelessWidget {
         onPointerMove: (event) => mapBloc.add(OnStopFollowingUser()),
         child: GoogleMap(
           polylines: polylines,
+          onCameraMove: (position) => mapBloc.mapCenter = position.target,
           style: jsonEncode(dessertTheme),
           // mapType: MapType.hybrid,
           initialCameraPosition: initialCameraPosition,
