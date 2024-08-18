@@ -9,17 +9,25 @@ part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  TrafficService trafficervice;
-  SearchBloc({required this.trafficervice}) : super(const SearchState()) {
+  TrafficService trafficService;
+  SearchBloc({required this.trafficService}) : super(const SearchState()) {
     on<OnActivateManualMarkerEvent>(
         (event, emit) => emit(state.copyWith(displayManualMarker: true)));
 
     on<OnDeactivateManualMarkerEvent>(
         (event, emit) => emit(state.copyWith(displayManualMarker: false)));
+
+    on<OnNewPlacesFoundEvent>(
+        (event, emit) => emit(state.copyWith(places: event.places)));
+
+    on<OnAddToHistoryEvent>((event, emit) =>
+        emit(state.copyWith(history: [event.place, ...state.history])));
   }
 
   Future<RouteDestination> getCoorsStartToEnd(LatLng start, LatLng end) async {
-    final trafficResponse = await trafficervice.getCoorsStartToEnd(start, end);
+    final trafficResponse = await trafficService.getCoorsStartToEnd(start, end);
+
+    final endPlace = await trafficService.getInformationByCoors(end);
 
     final geometry = trafficResponse.routes[0].geometry;
     final points = decodePolyline(geometry, accuracyExponent: 6);
@@ -35,6 +43,18 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       points: latLngList,
       duration: duration,
       distance: distance,
+      endPlace: endPlace,
     );
+  }
+
+  Future getPlacesByQuery(LatLng proximity, String query) async {
+    final resp = await trafficService.getResultsByQuery(proximity, query);
+    add(OnNewPlacesFoundEvent(places: resp));
+  }
+
+  Future addPointToHistory(LatLng point) async {
+    // aqui añades al array, pero al principio..............................
+    // const history = ['search_event.dart'];
+    // add(const OnAddToHistoryEvent(history: history));
   }
 }

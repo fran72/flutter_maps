@@ -9,9 +9,13 @@ import 'package:mapas_app/themes/themes.dart';
 class MapView extends StatelessWidget {
   final LatLng initialLocation;
   final Set<Polyline> polylines;
+  final Set<Marker> markers;
 
   const MapView(
-      {super.key, required this.initialLocation, required this.polylines});
+      {super.key,
+      required this.initialLocation,
+      required this.polylines,
+      required this.markers});
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,7 @@ class MapView extends StatelessWidget {
         onPointerMove: (event) => mapBloc.add(OnStopFollowingUser()),
         child: GoogleMap(
           polylines: polylines,
+          markers: markers,
           onCameraMove: (position) => mapBloc.mapCenter = position.target,
           style: jsonEncode(dessertTheme),
           // mapType: MapType.hybrid,

@@ -13,7 +13,8 @@ void main() => runApp(
               create: (context) =>
                   MapBloc(BlocProvider.of<LocationBloc>(context))),
           BlocProvider(
-              create: (context) => SearchBloc(trafficervice: TrafficService())),
+              create: (context) =>
+                  SearchBloc(trafficService: TrafficService())),
         ],
         child: const MyApp(),
       ),
